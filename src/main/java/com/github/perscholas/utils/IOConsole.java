@@ -35,7 +35,6 @@ public class IOConsole {
     }
 
     private final Scanner input;
-
     private final PrintStream output;
     private final AnsiColor ansiColor;
 
