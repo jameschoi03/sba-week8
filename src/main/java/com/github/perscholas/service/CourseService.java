@@ -35,7 +35,7 @@ public class CourseService implements CourseDao {
     public List<Integer> getAllCourseIds() {
         return getAllCourses()
                 .stream()
-                .map(course -> course.getId())
+                .map(CourseInterface::getId)
                 .collect(Collectors.toList());
     }
 
