@@ -6,7 +6,6 @@ import com.github.perscholas.model.CourseInterface;
 import com.github.perscholas.model.Student;
 import com.github.perscholas.model.StudentInterface;
 
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -22,7 +21,7 @@ public class StudentService implements StudentDao {
     }
 
     public StudentService() {
-        this(DatabaseConnection.MYSQL);
+        this(DatabaseConnection.MANAGEMENT_SYSTEM);
     }
 
     @Override
@@ -46,12 +45,16 @@ public class StudentService implements StudentDao {
 
     @Override
     public StudentInterface getStudentByEmail(String studentEmail) {
-        return null;
+        return getAllStudents()
+                .stream()
+                .filter(student -> student.getEmail().equals(studentEmail))
+                .findFirst()
+                .get();
     }
 
     @Override
     public Boolean validateStudent(String studentEmail, String password) {
-        return null;
+        return getStudentByEmail(studentEmail).getPassword().equals(password);
     }
 
     @Override

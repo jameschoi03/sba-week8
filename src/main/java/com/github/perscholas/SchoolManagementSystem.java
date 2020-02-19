@@ -15,7 +15,7 @@ public class SchoolManagementSystem implements Runnable {
     public void run() {
         String smsDashboardInput = getSchoolManagementSystemDashboardInput();
         if ("login".equals(smsDashboardInput)) {
-            StudentDao studentService = new StudentService(DatabaseConnection.MYSQL);
+            StudentDao studentService = new StudentService();
             String studentEmail = console.getStringInput("Enter your email:");
             String studentPassword = console.getStringInput("Enter your password:");
             Boolean isValidLogin = studentService.validateStudent(studentEmail, studentPassword);
