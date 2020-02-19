@@ -13,6 +13,12 @@ public enum DatabaseConnection {
             .setPassword("")
             .setPort(3306)
             .setDatabaseVendor("mariadb")
+            .setHost("127.0.0.1")),
+    UAT(new ConnectionBuilder()
+            .setUser("root")
+            .setPassword("")
+            .setPort(3306)
+            .setDatabaseVendor("mariadb")
             .setHost("127.0.0.1"));
 
     private final ConnectionBuilder connectionBuilder;

@@ -24,9 +24,8 @@ public class StudentService implements StudentDao {
         this(DatabaseConnection.MANAGEMENT_SYSTEM);
     }
 
-    @Override
-    public List<StudentInterface> getAllStudents() {
-        ResultSet result = dbc.executeQuery("SELECT * FROM students");
+    public List<StudentInterface> getAllStudentsWhere(String condition) {
+        ResultSet result = dbc.executeQuery("SELECT * FROM students WHERE " + condition + ";");
         List<StudentInterface> list = new ArrayList<>();
         try {
             while (result.next()) {
@@ -36,7 +35,7 @@ public class StudentService implements StudentDao {
                 StudentInterface student = new Student(studentEmail, name, password);
                 list.add(student);
             }
-        } catch(SQLException se) {
+        } catch (SQLException se) {
             throw new Error(se);
         }
 
@@ -44,12 +43,13 @@ public class StudentService implements StudentDao {
     }
 
     @Override
+    public List<StudentInterface> getAllStudents() {
+        return getAllStudentsWhere("true");
+    }
+
+    @Override
     public StudentInterface getStudentByEmail(String studentEmail) {
-        return getAllStudents()
-                .stream()
-                .filter(student -> student.getEmail().equals(studentEmail))
-                .findFirst()
-                .get();
+        return getAllStudentsWhere("`email` = '" + studentEmail + "'").get(0);
     }
 
     @Override

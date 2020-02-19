@@ -29,7 +29,6 @@ public class JdbcConfigurator {
         executeSqlFile("courses.populate-table.sql");
         executeSqlFile("students.create-table.sql");
         executeSqlFile("students.populate-table.sql");
-
     }
 
     private static void executeSqlFile(String fileName) {

@@ -50,7 +50,7 @@ public class SchoolManagementSystem implements Runnable {
     private String getCourseViewInput() {
         return console.getStringInput(new StringBuilder()
                 .append("Welcome to the Course View Dashboard!")
-                .append("From here, you can select any of the following options:")
+                .append("\nFrom here, you can select any of the following options:")
                 .append("\n\t[ view ], [ logout ]")
                 .toString());
     }
