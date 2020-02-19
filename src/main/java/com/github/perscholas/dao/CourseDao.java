@@ -10,4 +10,6 @@ import java.util.List;
  */
 public interface CourseDao {
     List<CourseInterface> getAllCourses();
+
+    List<Integer> getAllCourseIds();
 }

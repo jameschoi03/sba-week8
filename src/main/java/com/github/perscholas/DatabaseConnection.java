@@ -33,9 +33,12 @@ public enum DatabaseConnection {
 
     public void drop() {
         try {
+            String sqlStatement = "DROP DATABASE IF EXISTS " + name().toLowerCase() + ";";
             getDatabaseEngineConnection()
-                    .prepareStatement("DROP DATABASE IF EXISTS " + name().toLowerCase() + ";")
+                    .prepareStatement(sqlStatement)
                     .execute();
+            String infoMessage = String.format("Successfully executed statement \n\t`%s`", sqlStatement);
+            System.out.println(infoMessage);
         } catch (SQLException e) {
             throw new Error(e);
         }
@@ -43,9 +46,12 @@ public enum DatabaseConnection {
 
     public void create() {
         try {
+            String sqlStatement = "CREATE DATABASE IF NOT EXISTS " + name().toLowerCase() + ";";
             getDatabaseEngineConnection()
-                    .prepareStatement("CREATE DATABASE IF NOT EXISTS " + name().toLowerCase() + ";")
+                    .prepareStatement(sqlStatement)
                     .execute();
+            String infoMessage = String.format("Successfully executed statement \n\t`%s`", sqlStatement);
+            System.out.println(infoMessage);
         } catch (SQLException e) {
             throw new Error(e);
         }
@@ -53,9 +59,12 @@ public enum DatabaseConnection {
 
     public void use() {
         try {
+            String sqlStatement = "USE " + name().toLowerCase() + ";";
             getDatabaseEngineConnection()
-                    .prepareStatement("USE " + name().toLowerCase() + ";")
+                    .prepareStatement(sqlStatement)
                     .execute();
+            String infoMessage = String.format("Successfully executed statement \n\t`%s`", sqlStatement);
+            System.out.println(infoMessage);
         } catch (SQLException e) {
             throw new Error(e);
         }
@@ -63,18 +72,25 @@ public enum DatabaseConnection {
 
     public void executeStatement(String sqlStatement) {
         try {
+            sqlStatement = sqlStatement.trim();
             getScrollableStatement().execute(sqlStatement);
+            String infoMessage = String.format("Successfully executed statement \n\t`%s`", sqlStatement);
+            System.out.println(infoMessage);
         } catch (SQLException e) {
-            String errorMessage = String.format("Failed to execute statement `%s`", sqlStatement);
+            String errorMessage = String.format("Failed to execute statement \n\t`%s`", sqlStatement);
             throw new Error(errorMessage, e);
         }
     }
 
     public ResultSet executeQuery(String sqlQuery) {
         try {
-            return getScrollableStatement().executeQuery(sqlQuery);
+            sqlQuery = sqlQuery.trim();
+            ResultSet result =  getScrollableStatement().executeQuery(sqlQuery);
+            String infoMessage = String.format("Successfully executed query \n\t`%s`", sqlQuery);
+            System.out.println(infoMessage);
+            return result;
         } catch (SQLException e) {
-            String errorMessage = String.format("Failed to execute query `%s`", sqlQuery);
+            String errorMessage = String.format("Failed to execute query \n\t`%s`", sqlQuery);
             throw new Error(errorMessage, e);
         }
     }

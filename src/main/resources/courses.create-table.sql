@@ -1,2 +1,1 @@
-CREATE TABLE management_system.courses(id int not null primary key, name VARCHAR(50) not null, instructor text not null);
-
+CREATE TABLE management_system.courses(id int not null primary key, name VARCHAR(50) NOT NULL, instructor TEXT NOT NULL);

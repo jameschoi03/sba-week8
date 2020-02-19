@@ -1,11 +1,17 @@
 package com.github.perscholas;
 
+import com.github.perscholas.dao.CourseDao;
+import com.github.perscholas.dao.RegisteredStudentsDao;
 import com.github.perscholas.dao.StudentDao;
+import com.github.perscholas.model.CourseInterface;
+import com.github.perscholas.service.CourseService;
+import com.github.perscholas.service.RegisteredStudentsService;
 import com.github.perscholas.service.StudentService;
 import com.github.perscholas.utils.IOConsole;
 
 import java.sql.Connection;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class SchoolManagementSystem implements Runnable {
@@ -13,20 +19,40 @@ public class SchoolManagementSystem implements Runnable {
 
     @Override
     public void run() {
-        String smsDashboardInput = getSchoolManagementSystemDashboardInput();
-        if ("login".equals(smsDashboardInput)) {
-            StudentDao studentService = new StudentService();
-            String studentEmail = console.getStringInput("Enter your email:");
-            String studentPassword = console.getStringInput("Enter your password:");
-            Boolean isValidLogin = studentService.validateStudent(studentEmail, studentPassword);
-            if (isValidLogin) {
-                String studentDashboardInput = getStudentDashboardInput();
-                if ("register".equals(studentDashboardInput)) {
-                    Integer courseId = getCourseRegistryInput();
-                    studentService.registerStudentToCourse(studentEmail, courseId);
+        String smsDashboardInput;
+        do {
+            smsDashboardInput = getSchoolManagementSystemDashboardInput();
+            if ("login".equals(smsDashboardInput)) {
+                StudentDao studentService = new StudentService();
+                String studentEmail = console.getStringInput("Enter your email:");
+                String studentPassword = console.getStringInput("Enter your password:");
+                Boolean isValidLogin = studentService.validateStudent(studentEmail, studentPassword);
+                if (isValidLogin) {
+                    String studentDashboardInput = getStudentDashboardInput();
+                    if ("register".equals(studentDashboardInput)) {
+                        Integer courseId = getCourseRegistryInput();
+                        studentService.registerStudentToCourse(studentEmail, courseId);
+                        String studentCourseViewInput = getCourseViewInput();
+                        if ("view".equals(studentCourseViewInput)) {
+                            RegisteredStudentsDao registeredStudentsService = new RegisteredStudentsService();
+                            List<CourseInterface> courses = registeredStudentsService.getAllCourses(studentEmail);
+                            System.out.println(String.format(new StringBuilder()
+                                    .append("[ %s ] is registered to the following courses:")
+                                    .append("\n\t" + courses)
+                                    .toString(), studentEmail));
+                        }
+                    }
                 }
             }
-        }
+        } while (!"logout".equals(smsDashboardInput));
+    }
+
+    private String getCourseViewInput() {
+        return console.getStringInput(new StringBuilder()
+                .append("Welcome to the Course View Dashboard!")
+                .append("From here, you can select any of the following options:")
+                .append("\n\t[ view ], [ logout ]")
+                .toString());
     }
 
     private String getSchoolManagementSystemDashboardInput() {
@@ -39,7 +65,7 @@ public class SchoolManagementSystem implements Runnable {
 
     private String getStudentDashboardInput() {
         return console.getStringInput(new StringBuilder()
-                .append("Welcome to the Student Dashboard!")
+                .append("Welcome to the Course Registration Dashboard!")
                 .append("\nFrom here, you can select any of the following options:")
                 .append("\n\t[ register ], [ logout]")
                 .toString());
@@ -47,7 +73,8 @@ public class SchoolManagementSystem implements Runnable {
 
 
     private Integer getCourseRegistryInput() {
-        List<Integer> listOfCoursesIds = new ArrayList<>();
+        CourseDao courseDao = new CourseService();
+        List<Integer> listOfCoursesIds = courseDao.getAllCourseIds();
         return console.getIntegerInput(new StringBuilder()
                 .append("Welcome to the Course Registration Dashboard!")
                 .append("\nFrom here, you can select any of the following options:")

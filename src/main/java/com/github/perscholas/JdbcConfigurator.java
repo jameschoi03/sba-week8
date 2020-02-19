@@ -7,6 +7,7 @@ import org.mariadb.jdbc.Driver;
 import java.io.File;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Arrays;
 
 public class JdbcConfigurator {
     static {
@@ -24,14 +25,20 @@ public class JdbcConfigurator {
         dbc.drop();
         dbc.create();
         dbc.use();
-        createTable("courses.create-table.sql");
-        createTable("students.create-table.sql");
+        executeSqlFile("courses.create-table.sql");
+        executeSqlFile("courses.populate-table.sql");
+        executeSqlFile("students.create-table.sql");
+        executeSqlFile("students.populate-table.sql");
+
     }
 
-    private static void createTable(String fileName) {
+    private static void executeSqlFile(String fileName) {
         File creationStatementFile = DirectoryReference.RESOURCE_DIRECTORY.getFileFromDirectory(fileName);
         FileReader fileReader = new FileReader(creationStatementFile.getAbsolutePath());
-        String creationStatement = fileReader.toString();
-        dbc.executeStatement(creationStatement);
+        String[] statements = fileReader.toString().split(";");
+        for (int i = 0; i < statements.length; i++) {
+            String statement = statements[i];
+            dbc.executeStatement(statement);
+        }
     }
 }
