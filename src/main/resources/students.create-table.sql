@@ -1,1 +1,1 @@
-CREATE TABLE Student(email text not null primary key, name text not null, password text not null);
+CREATE TABLE management_system.students(email VARCHAR(50) not null primary key, name text not null, password text not null);

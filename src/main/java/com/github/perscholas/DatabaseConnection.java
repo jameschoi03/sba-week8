@@ -27,9 +27,15 @@ public enum DatabaseConnection {
                 .build();
     }
 
+    public Connection getDatabaseEngineConnection() {
+        return connectionBuilder.build();
+    }
+
     public void drop() {
         try {
-            connectionBuilder.build().prepareStatement("DROP DATABASE IF EXISTS " + name().toLowerCase() + ";").execute();
+            getDatabaseEngineConnection()
+                    .prepareStatement("DROP DATABASE IF EXISTS " + name().toLowerCase() + ";")
+                    .execute();
         } catch (SQLException e) {
             throw new Error(e);
         }
@@ -37,7 +43,9 @@ public enum DatabaseConnection {
 
     public void create() {
         try {
-            connectionBuilder.build().prepareStatement("CREATE DATABASE IF NOT EXISTS " + name().toLowerCase() + ";").execute();
+            getDatabaseEngineConnection()
+                    .prepareStatement("CREATE DATABASE IF NOT EXISTS " + name().toLowerCase() + ";")
+                    .execute();
         } catch (SQLException e) {
             throw new Error(e);
         }
@@ -45,7 +53,9 @@ public enum DatabaseConnection {
 
     public void use() {
         try {
-            connectionBuilder.build().prepareStatement("USE " + name().toLowerCase() + ";").execute();
+            getDatabaseEngineConnection()
+                    .prepareStatement("USE " + name().toLowerCase() + ";")
+                    .execute();
         } catch (SQLException e) {
             throw new Error(e);
         }
@@ -55,7 +65,8 @@ public enum DatabaseConnection {
         try {
             getScrollableStatement().execute(sqlStatement);
         } catch (SQLException e) {
-            throw new Error(e);
+            String errorMessage = String.format("Failed to execute statement `%s`", sqlStatement);
+            throw new Error(errorMessage, e);
         }
     }
 
@@ -63,7 +74,8 @@ public enum DatabaseConnection {
         try {
             return getScrollableStatement().executeQuery(sqlQuery);
         } catch (SQLException e) {
-            throw new Error(e);
+            String errorMessage = String.format("Failed to execute query `%s`", sqlQuery);
+            throw new Error(errorMessage, e);
         }
     }
 
