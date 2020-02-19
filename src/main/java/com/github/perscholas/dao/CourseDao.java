@@ -12,4 +12,6 @@ public interface CourseDao {
     List<CourseInterface> getAllCourses();
 
     List<Integer> getAllCourseIds();
+
+    List<String> getAllCourseNames();
 }

@@ -1,6 +1,7 @@
 package com.github.perscholas;
 
 import com.github.perscholas.utils.ConnectionBuilder;
+import com.github.perscholas.utils.IOConsole;
 
 import java.sql.*;
 
@@ -21,6 +22,7 @@ public enum DatabaseConnection {
             .setDatabaseVendor("mariadb")
             .setHost("127.0.0.1"));
 
+    private static final IOConsole console = new IOConsole(IOConsole.AnsiColor.CYAN);
     private final ConnectionBuilder connectionBuilder;
 
     DatabaseConnection(ConnectionBuilder connectionBuilder) {
@@ -44,7 +46,7 @@ public enum DatabaseConnection {
                     .prepareStatement(sqlStatement)
                     .execute();
             String infoMessage = String.format("Successfully executed statement \n\t`%s`", sqlStatement);
-            System.out.println(infoMessage);
+            console.println(infoMessage);
         } catch (SQLException e) {
             throw new Error(e);
         }
@@ -57,7 +59,7 @@ public enum DatabaseConnection {
                     .prepareStatement(sqlStatement)
                     .execute();
             String infoMessage = String.format("Successfully executed statement \n\t`%s`", sqlStatement);
-            System.out.println(infoMessage);
+            console.println(infoMessage);
         } catch (SQLException e) {
             throw new Error(e);
         }
@@ -70,7 +72,7 @@ public enum DatabaseConnection {
                     .prepareStatement(sqlStatement)
                     .execute();
             String infoMessage = String.format("Successfully executed statement \n\t`%s`", sqlStatement);
-            System.out.println(infoMessage);
+            console.println(infoMessage);
         } catch (SQLException e) {
             throw new Error(e);
         }
@@ -81,7 +83,7 @@ public enum DatabaseConnection {
             sqlStatement = sqlStatement.trim();
             getScrollableStatement().execute(sqlStatement);
             String infoMessage = String.format("Successfully executed statement \n\t`%s`", sqlStatement);
-            System.out.println(infoMessage);
+            console.println(infoMessage);
         } catch (SQLException e) {
             String errorMessage = String.format("Failed to execute statement \n\t`%s`", sqlStatement);
             throw new Error(errorMessage, e);
@@ -91,9 +93,9 @@ public enum DatabaseConnection {
     public ResultSet executeQuery(String sqlQuery) {
         try {
             sqlQuery = sqlQuery.trim();
-            ResultSet result =  getScrollableStatement().executeQuery(sqlQuery);
+            ResultSet result = getScrollableStatement().executeQuery(sqlQuery);
             String infoMessage = String.format("Successfully executed query \n\t`%s`", sqlQuery);
-            System.out.println(infoMessage);
+            console.println(infoMessage);
             return result;
         } catch (SQLException e) {
             String errorMessage = String.format("Failed to execute query \n\t`%s`", sqlQuery);

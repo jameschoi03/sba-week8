@@ -36,10 +36,10 @@ public class SchoolManagementSystem implements Runnable {
                         if ("view".equals(studentCourseViewInput)) {
                             RegisteredStudentsDao registeredStudentsService = new RegisteredStudentsService();
                             List<CourseInterface> courses = registeredStudentsService.getAllCourses(studentEmail);
-                            System.out.println(String.format(new StringBuilder()
+                            console.println(new StringBuilder()
                                     .append("[ %s ] is registered to the following courses:")
                                     .append("\n\t" + courses)
-                                    .toString(), studentEmail));
+                                    .toString(), studentEmail);
                         }
                     }
                 }
@@ -74,11 +74,15 @@ public class SchoolManagementSystem implements Runnable {
 
     private Integer getCourseRegistryInput() {
         CourseDao courseDao = new CourseService();
-        List<Integer> listOfCoursesIds = courseDao.getAllCourseIds();
+        List<String> listOfCoursesIds = courseDao.getAllCourseNames();
         return console.getIntegerInput(new StringBuilder()
                 .append("Welcome to the Course Registration Dashboard!")
                 .append("\nFrom here, you can select any of the following options:")
-                .append("\n\t" + listOfCoursesIds.toString())
+                .append("\n\t" + listOfCoursesIds
+                        .toString()
+                        .replaceAll("\\[", "")
+                        .replaceAll("\\]", "")
+                        .replaceAll(", ", "\n\t"))
                 .toString());
     }
 }

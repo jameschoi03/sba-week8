@@ -38,4 +38,12 @@ public class CourseService implements CourseDao {
                 .map(course -> course.getId())
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<String> getAllCourseNames() {
+        return getAllCourses()
+                .stream()
+                .map(course -> course.getId() + " - " + course.getName())
+                .collect(Collectors.toList());
+    }
 }
