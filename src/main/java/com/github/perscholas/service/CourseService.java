@@ -16,7 +16,7 @@ public class CourseService implements CourseDao {
     @Override
     public List<CourseInterface> getAllCourses() {
         List<CourseInterface> list = new ArrayList<>();
-        ResultSet rs = DatabaseConnection.MANAGEMENT_SYSTEM.executeQuery("SELECT * FROM courses");
+        ResultSet rs = getDatabaseConnection().executeQuery("SELECT * FROM courses");
         try {
             while (rs.next()) {
                 int id = rs.getInt("id");
@@ -45,5 +45,28 @@ public class CourseService implements CourseDao {
                 .stream()
                 .map(course -> course.getId() + " - " + course.getName())
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public CourseInterface getCourse(Integer id) {
+        return getAllCourses()
+                .stream()
+                .filter(course -> course.getId().equals(id))
+                .collect(Collectors.toList())
+                .get(0);
+    }
+
+    @Override
+    public CourseInterface getCourse(String name) {
+        return getAllCourses()
+                .stream()
+                .filter(course -> course.getName().equals(name))
+                .collect(Collectors.toList())
+                .get(0);
+    }
+
+    @Override
+    public DatabaseConnection getDatabaseConnection() {
+        return DatabaseConnection.MANAGEMENT_SYSTEM;
     }
 }

@@ -9,7 +9,7 @@ import java.util.List;
  * @author leonhunter
  * @created 02/12/2020 - 5:55 PM
  */
-public interface StudentDao {
+public interface StudentDao extends Dao {
     /**
      * reads the student table in database
      * @return database data as a List<Student>
