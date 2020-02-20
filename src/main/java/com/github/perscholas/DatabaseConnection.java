@@ -47,11 +47,20 @@ public enum DatabaseConnection implements DatabaseConnectionInterface {
     }
 
     @Override
-    public void drop() {
+    public void create() {
+        String sqlStatement = null; // TODO - define statement
+        String info;
+        try {
+            // TODO - execute statement
+            info = "Successfully executed statement `%s`.";
+        } catch (Exception sqlException) {
+            info = "Failed to executed statement `%s`.";
+        }
+        console.println(info, sqlStatement);
     }
 
     @Override
-    public void create() {
+    public void drop() {
     }
 
     @Override

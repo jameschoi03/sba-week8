@@ -1,7 +1,5 @@
 package com.github.perscholas;
 
-import com.github.perscholas.utils.ConnectionBuilder;
-
 import java.sql.Connection;
 import java.sql.ResultSet;
 
