@@ -1,33 +1,69 @@
 package com.github.perscholas;
 
-import java.sql.*;
+import com.github.perscholas.utils.ConnectionBuilder;
+import com.github.perscholas.utils.IOConsole;
+
+import java.sql.Connection;
+import java.sql.ResultSet;
 
 /**
  * Created by leon on 2/18/2020.
  */
-public enum DatabaseConnection {
-    MYSQL;
+public enum DatabaseConnection implements DatabaseConnectionInterface {
+    MANAGEMENT_SYSTEM,
+    UAT;
 
-    public Connection getConnection() {
-        String username = "root";
-        String password = "";
-        String dbVendor = name().toLowerCase();
-        String url = "jdbc:" + dbVendor + "://127.0.0.1/";
-        try {
-            return DriverManager.getConnection(url, username, password);
-        } catch (SQLException e) {
-            throw new Error(e);
-        }
+    private static final IOConsole console = new IOConsole(IOConsole.AnsiColor.CYAN);
+    private final ConnectionBuilder connectionBuilder;
+
+    DatabaseConnection(ConnectionBuilder connectionBuilder) {
+        this.connectionBuilder = connectionBuilder;
     }
 
+    DatabaseConnection() {
+        this(new ConnectionBuilder()
+                .setUser("root")
+                .setPassword("")
+                .setPort(3306)
+                .setDatabaseVendor("mariadb")
+                .setHost("127.0.0.1"));
+    }
+
+    @Override
+    public String getDatabaseName() {
+        return name().toLowerCase();
+    }
+
+    @Override
+    public Connection getDatabaseConnection() {
+        return connectionBuilder
+                .setDatabaseName(getDatabaseName())
+                .build();
+    }
+
+    @Override
+    public Connection getDatabaseEngineConnection() {
+        return connectionBuilder.build();
+    }
+
+    @Override
+    public void drop() {
+    }
+
+    @Override
+    public void create() {
+    }
+
+    @Override
+    public void use() {
+    }
+
+    @Override
     public void executeStatement(String sqlStatement) {
     }
 
+    @Override
     public ResultSet executeQuery(String sqlQuery) {
-        return null;
-    }
-
-    private Statement getScrollableStatement() {
         return null;
     }
 }

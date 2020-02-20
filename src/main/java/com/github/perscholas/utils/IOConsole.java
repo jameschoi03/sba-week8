@@ -10,20 +10,49 @@ import java.util.Scanner;
  * used to output prompt to user and get input from user
  */
 public class IOConsole {
-    private final Scanner input;
-    private final PrintStream output;
+    public enum AnsiColor {
+        AUTO("\u001B[0m"),
+        BLACK("\u001B[30m"),
+        RED("\u001B[31m"),
+        GREEN("\u001B[32m"),
+        YELLOW("\u001B[33m"),
+        BLUE("\u001B[34m"),
+        PURPLE("\u001B[35m"),
+        CYAN("\u001B[36m"),
+        WHITE("\u001B[37m");
 
-    public IOConsole() {
-        this(System.in, System.out);
+        private final String color;
+
+        AnsiColor(String ansiColor) {
+            this.color = ansiColor;
+        }
+
+        public String getColor() {
+            return color;
+        }
+
     }
 
-    public IOConsole(InputStream in, PrintStream out) {
+    private final Scanner input;
+    private final PrintStream output;
+    private final AnsiColor ansiColor;
+
+    public IOConsole() {
+        this(AnsiColor.AUTO, System.in, System.out);
+    }
+
+    public IOConsole(AnsiColor ansiColor) {
+        this(ansiColor, System.in, System.out);
+    }
+
+    public IOConsole(AnsiColor ansiColor, InputStream in, PrintStream out) {
+        this.ansiColor = ansiColor;
         this.input = new Scanner(in);
         this.output = out;
     }
 
     public void print(String val, Object... args) {
-        output.format(val, args);
+        output.format(ansiColor.getColor() + val, args);
     }
 
     public void println(String val, Object... vals) {
