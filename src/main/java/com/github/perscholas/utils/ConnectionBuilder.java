@@ -7,6 +7,7 @@ import java.sql.SQLException;
 /**
  * Created by leon on 3/13/18.
  */
+
 public class ConnectionBuilder {
     private Integer portNumber;
     private String userName;
@@ -61,7 +62,7 @@ public class ConnectionBuilder {
         }
     }
 
-    @Override
+
     public String toString() {
         Boolean isHostNull = this.hostName == null;
         Boolean isPortNull = portNumber == null;

@@ -2,15 +2,20 @@ package com.github.perscholas;
 
 import com.github.perscholas.utils.DirectoryReference;
 import com.github.perscholas.utils.FileReader;
+import org.mariadb.jdbc.Driver;
 
 import java.io.File;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.Arrays;
 
 public class JdbcConfigurator {
     static {
+        // Attempt to register JDBC Driver
         try {
-            // TODO - Attempt to register JDBC Driver
-        } catch (Exception e) {
-            throw new Error(e);
+            DriverManager.registerDriver(Driver.class.newInstance());
+        } catch (InstantiationException | IllegalAccessException | SQLException e1) {
+            throw new Error(e1);
         }
     }
 
@@ -20,19 +25,24 @@ public class JdbcConfigurator {
         dbc.drop();
         dbc.create();
         dbc.use();
-        executeSqlFile("courses.create-table.sql");
-        executeSqlFile("courses.populate-table.sql");
-        executeSqlFile("students.create-table.sql");
-        executeSqlFile("students.populate-table.sql");
+        createTable("courses.create-table.sql");
+        createTable("students.create-table.sql");
+        createTable("register.create-table.sql");
+        populateTable("courses.populate-table.sql");
+        populateTable("students.populate-table.sql");
     }
 
-    private static void executeSqlFile(String fileName) {
+    private static void createTable(String fileName) {
         File creationStatementFile = DirectoryReference.RESOURCE_DIRECTORY.getFileFromDirectory(fileName);
         FileReader fileReader = new FileReader(creationStatementFile.getAbsolutePath());
-        String[] statements = fileReader.toString().split(";");
-        for (int i = 0; i < statements.length; i++) {
-            String statement = statements[i];
-            dbc.executeStatement(statement);
-        }
+        String creationStatement = fileReader.toString();
+        dbc.executeStatement(creationStatement);
+    }
+
+    private static void populateTable(String fileName){
+        File populateFile = DirectoryReference.RESOURCE_DIRECTORY.getFileFromDirectory(fileName);
+        FileReader fileReader = new FileReader(populateFile.getAbsolutePath());
+        String[] seeds = fileReader.toString().split(";");
+        Arrays.stream(seeds).forEach(DatabaseConnection.MANAGEMENT_SYSTEM::executeStatement);
     }
 }

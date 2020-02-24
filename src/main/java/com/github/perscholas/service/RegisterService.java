@@ -1,31 +1,28 @@
 package com.github.perscholas.service;
 
 import com.github.perscholas.DatabaseConnection;
-import com.github.perscholas.dao.CourseDao;
+import com.github.perscholas.dao.RegisterDao;
 import com.github.perscholas.model.Course;
 import com.github.perscholas.model.CourseInterface;
-import com.github.perscholas.model.Student;
-import com.github.perscholas.model.StudentInterface;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-// TODO - Implement respective DAO interface
-public class CourseService implements CourseDao {
+public class RegisterService implements RegisterDao {
     private final DatabaseConnection dbc;
 
-    public CourseService(DatabaseConnection dbc) {
+    public RegisterService(DatabaseConnection dbc) {
         this.dbc = dbc;
     }
 
-    public CourseService() {
+    public RegisterService() {
         this(DatabaseConnection.MANAGEMENT_SYSTEM);
     }
     @Override
-    public List<CourseInterface> getAllCourses() {
-        ResultSet result = dbc.executeQuery("SELECT * FROM Course");
+    public List<CourseInterface> getStudentsRegistry(String email) {
+        ResultSet result = dbc.executeQuery("SELECT * FROM Register WHERE email = '"+email+"'");
         List<CourseInterface> list = new ArrayList<>();
         try {
             while (result.next()) {
